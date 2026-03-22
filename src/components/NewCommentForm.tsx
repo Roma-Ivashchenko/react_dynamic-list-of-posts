@@ -43,26 +43,39 @@ export const NewCommentForm: React.FC<Props> = ({ selectedPostId, onAdd }) => {
     setHasBodyError(false);
   };
 
+  const clear = () => {
+    setName('');
+    setEmail('');
+    setBody('');
+
+    setHasNameError(false);
+    setHasEmailError(false);
+    setHasBodyError(false);
+  };
+
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+    const isNameInvalid = !name.trim();
+    const isEmailInvalid = !email.trim();
+    const isBodyInvalid = !body.trim();
 
-    setHasNameError(!name);
-    setHasEmailError(!email);
-    setHasBodyError(!body);
+    setHasNameError(isNameInvalid);
+    setHasEmailError(isEmailInvalid);
+    setHasBodyError(isBodyInvalid);
 
-    setIsSubmitting(true);
-
-    if (!name || !email || !body) {
+    if (isNameInvalid || isEmailInvalid || isBodyInvalid) {
       setIsSubmitting(false);
 
       return;
     }
 
     const newComment = {
-      name: name,
-      email: email,
-      body: body,
+      name,
+      email,
+      body,
     };
+
+    setIsSubmitting(true);
 
     addComment(selectedPostId, newComment)
       .then(comment => {
@@ -200,7 +213,7 @@ export const NewCommentForm: React.FC<Props> = ({ selectedPostId, onAdd }) => {
           <button
             type="reset"
             className="button is-link is-light"
-            onClick={reset}
+            onClick={clear}
           >
             Clear
           </button>

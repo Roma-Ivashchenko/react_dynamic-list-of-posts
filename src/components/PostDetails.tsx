@@ -75,10 +75,14 @@ export const PostDetails: React.FC<Props> = ({ selectedPost }) => {
                     className="delete is-small"
                     aria-label="delete"
                     onClick={() => {
-                      deleteComment(comment.id).then(() =>
-                        setComments(currentComments =>
-                          currentComments.filter(c => c.id !== comment.id),
-                        ),
+                      const previousComments = [...comments];
+
+                      setComments(currentComments =>
+                        currentComments.filter(c => c.id !== comment.id),
+                      );
+
+                      deleteComment(comment.id).catch(() =>
+                        setComments(previousComments),
                       );
                     }}
                   >
